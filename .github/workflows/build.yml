@@ -1,0 +1,23 @@
+name: Build
+
+on: push
+
+jobs:
+  build:
+    name: Build the project
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['3.1.x']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup .NET Core SDK ${{ matrix.dotnet }}
+        uses: actions/setup-dotnet@v1.6.0
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
